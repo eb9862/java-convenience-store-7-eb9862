@@ -1,14 +1,19 @@
 package store;
 
+import static store.view.Constant.WELCOME_MESSAGE;
+
 import java.io.IOException;
 import store.domain.Inventory;
 import store.domain.Promotions;
+import store.view.OutputView;
 
 public class Application {
     public static void main(String[] args){
         // TODO: 프로그램 구현
         Inventory inventory = prepareInventory();
         Promotions promotions = preparePromotions();
+
+        OutputView.printMessage(WELCOME_MESSAGE);
     }
 
     static Inventory prepareInventory() {
@@ -30,5 +35,4 @@ public class Application {
             throw new RuntimeException(e);
         }
     }
-
 }
