@@ -1,6 +1,7 @@
 package store.view;
 
 import static store.view.Constant.INTRODUCE_PRODUCT_MESSAGE;
+import static store.view.ErrorMessage.ERROR_TAG;
 import static store.view.OutputMessage.PRODUCT_INFO;
 import static store.view.OutputMessage.PRODUCT_INFO_ZERO_QUANTITY;
 
@@ -29,6 +30,10 @@ public class OutputView {
 
     public static void printMessage(String message) {
         System.out.println(message);
+    }
+
+    public static void printError(String errorMessage) {
+        printMessage(ERROR_TAG + errorMessage);
     }
 
     public static void printNewLine() {

@@ -47,7 +47,7 @@ public class Application {
                 inventory.checkOrder(order);
                 return order;
             } catch (IllegalArgumentException e) {
-                OutputView.printMessage(e.getMessage());
+                OutputView.printError(e.getMessage());
             }
         }
     }
