@@ -16,8 +16,8 @@
 
 - [x] 상품 목록(`src/main/resources/products.md`)을 파일 입출력을 통해 불러온다
   - [x] 불러온 데이터를 통해 재고를 채운다
-- [ ] 행사 목록(`src/main/resources/promotions.md`)을 파일 입출력을 통해 불러온다
-  - [ ] 불러온 데이터를 통해 행사 정보를 등록한다
+- [x] 행사 목록(`src/main/resources/promotions.md`)을 파일 입출력을 통해 불러온다
+  - [x] 불러온 데이터를 통해 행사 정보를 등록한다
 
 
 ### 🛍️ 재고 안내 및 구매
