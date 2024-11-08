@@ -44,6 +44,7 @@ public class Application {
         while (true) {
             try {
                 Order order = new Order(InputView.readOrder());
+                inventory.checkOrder(order);
                 return order;
             } catch (IllegalArgumentException e) {
                 OutputView.printMessage(e.getMessage());

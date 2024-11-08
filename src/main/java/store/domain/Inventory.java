@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 public class Inventory {
 
@@ -29,6 +30,18 @@ public class Inventory {
             products.add(createProduct(productInfo));
         }
         br.close();
+    }
+
+    public void checkOrder(Order order) {
+        Map<String, Integer> orderInfo = order.getOrders();
+        orderInfo.forEach((name, quantity) -> {
+            if (!hasProduct(name)) {
+                throw new IllegalArgumentException("존재하지 않는 상품입니다. 다시 입력해 주세요.");
+            }
+            if (isQuantityExceedingInventory(name, quantity)) {
+                throw new IllegalArgumentException("재고 수량을 초과하여 구매할 수 없습니다. 다시 입력해 주세요.");
+            }
+        });
     }
 
     private List<Object> parseProductInfo(String line) {
@@ -67,6 +80,30 @@ public class Inventory {
         int quantity = (int) productInfo.get(2);
         String promotion = (String) productInfo.getLast();
         return new Product(name, price, quantity, promotion);
+    }
+
+    private boolean hasProduct(String name) {
+        for (Product product : products) {
+            if (name.equals(product.getName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isQuantityExceedingInventory(String name, int quantity) {
+        int totalQuantity = findTotalQuantity(name);
+        return totalQuantity < quantity;
+    }
+
+    private int findTotalQuantity(String name) {
+        int totalQuantity = 0;
+        for (Product product : products) {
+            if (name.equals(product.getName())) {
+                totalQuantity += product.getQuantity();
+            }
+        }
+        return totalQuantity;
     }
 
     public List<Product> getProducts() {
