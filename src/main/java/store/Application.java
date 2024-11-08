@@ -4,7 +4,9 @@ import static store.view.Constant.WELCOME_MESSAGE;
 
 import java.io.IOException;
 import store.domain.Inventory;
+import store.domain.Order;
 import store.domain.Promotions;
+import store.view.InputView;
 import store.view.OutputView;
 
 public class Application {
@@ -15,6 +17,7 @@ public class Application {
 
         OutputView.printMessage(WELCOME_MESSAGE);
         OutputView.printInventory(inventory);
+        Order order = inputOrder(inventory);
     }
 
     static Inventory prepareInventory() {
@@ -34,6 +37,17 @@ public class Application {
             return promotions;
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    static Order inputOrder(Inventory inventory) {
+        while (true) {
+            try {
+                Order order = new Order(InputView.readOrder());
+                return order;
+            } catch (IllegalArgumentException e) {
+                OutputView.printMessage(e.getMessage());
+            }
         }
     }
 }
