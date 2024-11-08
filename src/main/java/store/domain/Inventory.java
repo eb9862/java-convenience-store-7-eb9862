@@ -2,6 +2,8 @@ package store.domain;
 
 import static store.view.Constant.BLANK;
 import static store.view.Constant.PRODUCTS_FILE_NAME;
+import static store.view.ErrorMessage.INSUFFICIENT_INVENTORY_MESSAGE;
+import static store.view.ErrorMessage.PRODUCT_NOT_FOUND_MESSAGE;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -36,10 +38,10 @@ public class Inventory {
         Map<String, Integer> orderInfo = order.getOrders();
         orderInfo.forEach((name, quantity) -> {
             if (!hasProduct(name)) {
-                throw new IllegalArgumentException("존재하지 않는 상품입니다. 다시 입력해 주세요.");
+                throw new IllegalArgumentException(PRODUCT_NOT_FOUND_MESSAGE);
             }
             if (isQuantityExceedingInventory(name, quantity)) {
-                throw new IllegalArgumentException("재고 수량을 초과하여 구매할 수 없습니다. 다시 입력해 주세요.");
+                throw new IllegalArgumentException(INSUFFICIENT_INVENTORY_MESSAGE);
             }
         });
     }
