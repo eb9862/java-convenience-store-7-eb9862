@@ -14,6 +14,7 @@ public class Application {
         Promotions promotions = preparePromotions();
 
         OutputView.printMessage(WELCOME_MESSAGE);
+        OutputView.printInventory(inventory);
     }
 
     static Inventory prepareInventory() {
