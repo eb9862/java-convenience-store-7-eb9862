@@ -28,6 +28,7 @@ public class Inventory {
             addIfNoProductWithoutPromotion(productInfo);
             products.add(createProduct(productInfo));
         }
+        br.close();
     }
 
     private List<Object> parseProductInfo(String line) {
