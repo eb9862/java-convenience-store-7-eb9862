@@ -1,6 +1,6 @@
 package store;
 
-import static store.util.ErrorMessage.INVALID_INPUT_MESSAGE;
+import static store.util.Validator.validateAnswer;
 import static store.view.InputView.readForAdditionalItem;
 import static store.view.InputView.readForMembershipDiscount;
 import static store.view.InputView.readForOutOfStock;
@@ -20,14 +20,24 @@ public class PaymentService {
     Map<String, Integer> shoppingCart;
     Receipt receipt;
 
-    PaymentService(Inventory inventory, Promotions promotions, Order order) {
+    public PaymentService(Inventory inventory, Promotions promotions, Order order) {
         shoppingCart = new LinkedHashMap<>();
         receipt = new Receipt();
         checkBenefitOrOutOfStock(inventory, promotions, order);
         updatePurchaseHistory(inventory);
         updateGiveAwayHistory(inventory, promotions, order);
-
+        //updateInventory(inventory, promotions, order);
+        checkMembershipDiscount(promotions);
     }
+
+    void checkMembershipDiscount(Promotions promotions) {
+        String answer = inputForMembershipDiscount();
+        if (answer.equals("Y")) {
+            receipt.applyMembershipDiscount(promotions);
+        }
+    }
+
+    //void updateInventory(Inventory inventory, Promotions promotions, Order order) {}
 
     void updatePurchaseHistory(Inventory inventory) {
         shoppingCart.forEach((productName, quantity) -> {
@@ -40,8 +50,7 @@ public class PaymentService {
     }
 
     void updateGiveAwayHistory(Inventory inventory, Promotions promotions, Order order) {
-        Map<String, Integer> orders = order.getOrders();
-        orders.forEach((productName, quantity) -> {
+        shoppingCart.forEach((productName, quantity) -> {
             Product product = inventory.findProductWithPromotion(productName);
             if (product != null && promotions.isPromotionApplicable(product)) {
                 Promotion promotion = promotions.findPromotion(product.getPromotionName());
@@ -126,9 +135,7 @@ public class PaymentService {
         }
     }
 
-    static void validateAnswer(String answer) {
-        if (!answer.equals("Y") && !answer.equals("N")) {
-            throw new IllegalArgumentException(INVALID_INPUT_MESSAGE);
-        }
+    public Receipt getReceipt() {
+        return receipt;
     }
 }
