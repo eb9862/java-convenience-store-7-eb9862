@@ -13,7 +13,6 @@ public class Constant {
     public static final String ADDITIONAL_PURCHASE_MESSAGE = "감사합니다. 구매하고 싶은 다른 상품이 있나요? (Y/N)";
 
     public static final String RECEIPT_TITLE = "==============W 편의점================";
-    public static final String RECEIPT_PRODUCT_NAME_QUANTITY_AMOUNT = "상품명                수량      금액";
     public static final String RECEIPT_GIVEAWAY_TITLE = "=============증\t\t정===============";
     public static final String RECEIPT_AMOUNT_INFO_TITLE = "====================================";
 }

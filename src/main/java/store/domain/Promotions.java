@@ -1,6 +1,6 @@
 package store.domain;
 
-import static store.view.Constant.PROMOTIONS_FILE_NAME;
+import static store.util.Constant.PROMOTIONS_FILE_NAME;
 
 import camp.nextstep.edu.missionutils.DateTimes;
 import java.io.BufferedReader;

@@ -1,6 +1,6 @@
 package store.domain;
 
-import static store.view.Constant.BLANK;
+import static store.util.Constant.BLANK;
 import static store.util.ErrorMessage.INVALID_ORDER_MESSAGE;
 
 import java.util.Collections;
