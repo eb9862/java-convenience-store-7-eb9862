@@ -1,9 +1,10 @@
 package store.domain;
 
 import static store.view.Constant.BLANK;
-import static store.view.ErrorMessage.INVALID_INPUT_MESSAGE;
+import static store.util.ErrorMessage.INVALID_ORDER_MESSAGE;
 
-import java.util.HashMap;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -12,7 +13,7 @@ public class Order {
     Map<String, Integer> orders;
 
     public Order(String orderInput) {
-        this.orders = new HashMap<>();
+        this.orders = new LinkedHashMap<>();
         validate(orderInput);
         putToOrders(orderInput);
     }
@@ -43,7 +44,7 @@ public class Order {
 
     private void checkSquareBracket(String order) {
         if (!isStartAndEndWithSquareBracket(order)) {
-            throw new IllegalArgumentException(INVALID_INPUT_MESSAGE);
+            throw new IllegalArgumentException(INVALID_ORDER_MESSAGE);
         }
     }
 
@@ -51,7 +52,7 @@ public class Order {
         String orderNoBracket = removeSquareBracket(order);
         List<String> splitHyphen = List.of(orderNoBracket.split("-"));
         if (splitHyphen.size() != 2) {
-            throw new IllegalArgumentException(INVALID_INPUT_MESSAGE);
+            throw new IllegalArgumentException(INVALID_ORDER_MESSAGE);
         }
         String quantity = splitHyphen.getLast();
         checkQuantityPart(quantity);
@@ -61,10 +62,10 @@ public class Order {
         try {
             int quantity = Integer.parseInt(quantityPart);
             if (quantity <= 0) {
-                throw new IllegalArgumentException(INVALID_INPUT_MESSAGE);
+                throw new IllegalArgumentException(INVALID_ORDER_MESSAGE);
             }
         } catch (NumberFormatException e) {
-            throw new IllegalArgumentException(INVALID_INPUT_MESSAGE);
+            throw new IllegalArgumentException(INVALID_ORDER_MESSAGE);
         }
     }
 
@@ -77,6 +78,6 @@ public class Order {
     }
 
     public Map<String, Integer> getOrders() {
-        return orders;
+        return Collections.unmodifiableMap(orders);
     }
 }
