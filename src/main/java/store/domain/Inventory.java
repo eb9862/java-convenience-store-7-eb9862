@@ -1,7 +1,7 @@
 package store.domain;
 
-import static store.view.Constant.BLANK;
-import static store.view.Constant.PRODUCTS_FILE_NAME;
+import static store.util.Constant.BLANK;
+import static store.util.Constant.PRODUCTS_FILE_NAME;
 import static store.util.ErrorMessage.INSUFFICIENT_INVENTORY_MESSAGE;
 import static store.util.ErrorMessage.PRODUCT_NOT_FOUND_MESSAGE;
 
@@ -15,7 +15,7 @@ import java.util.Map;
 
 public class Inventory {
 
-    List<Product> products;
+    static List<Product> products;
 
     public Inventory() throws IOException {
         this.products = new ArrayList<>();
@@ -96,6 +96,15 @@ public class Inventory {
     public Product findProductWithPromotion(String name) {
         for (Product product : products) {
             if (name.equals(product.getName()) && product.hasPromotion()) {
+                return product;
+            }
+        }
+        return null;
+    }
+
+    public static Product findProductWithoutPromotion(String name) {
+        for (Product product : products) {
+            if (name.equals(product.getName()) && !product.hasPromotion()) {
                 return product;
             }
         }

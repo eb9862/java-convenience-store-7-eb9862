@@ -78,7 +78,7 @@ public class PaymentService {
     }
 
     boolean canApplyPromotionBenefit(Product product, Promotion promotion, Map.Entry<String, Integer> order) {
-        int bundle = promotion.getBuy() + promotion.getGet();
+        int bundle = promotion.calculateBundle();
         int quantity = order.getValue();
         if (quantity < product.getQuantity()) {
             return quantity % bundle == bundle - 1;
@@ -87,7 +87,7 @@ public class PaymentService {
     }
 
     void checkOutOfStock(Product product, Promotion promotion, Map.Entry<String, Integer> order) {
-        int bundle = promotion.getBuy() + promotion.getGet();
+        int bundle = promotion.calculateBundle();
         int shareOfOrder = order.getValue() / bundle;
         int shareOfProduct = product.getQuantity() / bundle;
         int shortageQuantity = order.getValue() - (Math.min(shareOfOrder, shareOfProduct) * bundle);

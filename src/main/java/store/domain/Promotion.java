@@ -22,6 +22,10 @@ public class Promotion {
         return now.isAfter(startDate) && now.isBefore(endDate);
     }
 
+    public int calculateBundle() {
+        return buy + get;
+    }
+
     public String getName() {
         return name;
     }
