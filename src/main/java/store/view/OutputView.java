@@ -17,6 +17,7 @@ import static store.view.MessageTemplate.RECEIPT_PURCHASE_HISTORY;
 import static store.view.MessageTemplate.RECEIPT_TOTAL_PURCHASE_AMOUNT;
 
 import java.util.List;
+import java.util.Map;
 import store.domain.Inventory;
 import store.domain.Product;
 import store.domain.Receipt;
@@ -34,10 +35,12 @@ public class OutputView extends View {
 
     public static void printProductInfo(Product product) {
         if (!product.isZeroQuantity()) {
-            printMessage(PRODUCT_INFO.format(product.getName(), product.getPrice(), product.getQuantity(), product.getPromotionName()));
+            printMessage(PRODUCT_INFO.format(product.getName(), product.getPrice(), product.getQuantity(),
+                    product.getPromotionName()));
             return;
         }
-        printMessage(PRODUCT_INFO_ZERO_QUANTITY.format(product.getName(), product.getPrice(), product.getPromotionName()));
+        printMessage(
+                PRODUCT_INFO_ZERO_QUANTITY.format(product.getName(), product.getPrice(), product.getPromotionName()));
     }
 
     public static void displayReceipt(Receipt receipt) {
@@ -50,7 +53,8 @@ public class OutputView extends View {
 
     private static void displayAmountInfo(Receipt receipt) {
         printMessage(RECEIPT_AMOUNT_INFO_TITLE);
-        printMessage(RECEIPT_TOTAL_PURCHASE_AMOUNT.format("총구매액", receipt.calculateTotalQuantity(), receipt.calculateTotalPurchaseAmount()));
+        printMessage(RECEIPT_TOTAL_PURCHASE_AMOUNT.format("총구매액", receipt.calculateTotalQuantity(),
+                receipt.calculateTotalPurchaseAmount()));
         printMessage(RECEIPT_PROMOTION_DISCOUNT.format("행사할인", BLANK, receipt.calculatePromotionDiscount()));
         printMessage(RECEIPT_MEMBERSHIP_DISCOUNT.format("멤버십할인", BLANK, receipt.calculateMembershipDiscount()));
         printMessage(RECEIPT_PAYMENT.format("내실돈", BLANK, receipt.calculatePayment()));
@@ -64,7 +68,8 @@ public class OutputView extends View {
     }
 
     private static void displayPurchaseHistory(Receipt receipt) {
-        receipt.purchaseHistory.forEach((product, quantity) -> {
+        Map<Product, Integer> purchaseHistory = receipt.getPurchaseHistory();
+        purchaseHistory.forEach((product, quantity) -> {
             printMessage(RECEIPT_PURCHASE_HISTORY.format(product.getName(), quantity, product.getPrice() * quantity));
         });
     }
