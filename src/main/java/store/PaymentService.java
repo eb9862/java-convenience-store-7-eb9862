@@ -2,6 +2,7 @@ package store;
 
 import static store.util.ErrorMessage.INVALID_INPUT_MESSAGE;
 import static store.view.InputView.readForAdditionalItem;
+import static store.view.InputView.readForMembershipDiscount;
 import static store.view.InputView.readForOutOfStock;
 
 import java.util.LinkedHashMap;
@@ -19,34 +20,55 @@ public class PaymentService {
     Map<String, Integer> shoppingCart;
     Receipt receipt;
 
-    PaymentService() {
+    PaymentService(Inventory inventory, Promotions promotions, Order order) {
         shoppingCart = new LinkedHashMap<>();
         receipt = new Receipt();
+        checkBenefitOrOutOfStock(inventory, promotions, order);
+        updatePurchaseHistory(inventory);
+        updateGiveAwayHistory(inventory, promotions, order);
+
     }
 
-    void promotionService(Inventory inventory, Promotions promotions, Order order) {
+    void updatePurchaseHistory(Inventory inventory) {
+        shoppingCart.forEach((productName, quantity) -> {
+            Product product = inventory.findProductWithPromotion(productName);
+            if (product == null) {
+                product = Inventory.findProductWithoutPromotion(productName);
+            }
+            receipt.addPurchaseHistory(product, quantity);
+        });
+    }
+
+    void updateGiveAwayHistory(Inventory inventory, Promotions promotions, Order order) {
+        Map<String, Integer> orders = order.getOrders();
+        orders.forEach((productName, quantity) -> {
+            Product product = inventory.findProductWithPromotion(productName);
+            if (product != null && promotions.isPromotionApplicable(product)) {
+                Promotion promotion = promotions.findPromotion(product.getPromotionName());
+                receipt.addGiveAwayHistory(product, promotion, quantity);
+            }
+        });
+    }
+
+    void checkBenefitOrOutOfStock(Inventory inventory, Promotions promotions, Order order) {
         Map<String, Integer> orders = order.getOrders();
         orders.forEach((productName, quantity) -> {
             shoppingCart.put(productName, quantity);
             Product product = inventory.findProductWithPromotion(productName);
             if (product != null && promotions.isPromotionApplicable(product)) {
                 Promotion promotion = promotions.findPromotion(product.getPromotionName());
-
-                boolean hasPromotionBenefit = false;
-                if (canApplyPromotion(product, promotion, Map.entry(productName, quantity))) {
-                    hasPromotionBenefit = true;
+                if (canApplyPromotionBenefit(product, promotion, Map.entry(productName, quantity))) {
                     if (inputForAdditionalItem(productName).equals("Y")) {
                         shoppingCart.put(productName, quantity + 1);
                     }
+                    return;
                 }
-                if (!hasPromotionBenefit) {
-                    checkOutOfStock(product, promotion, Map.entry(productName, quantity));
-                }
+                checkOutOfStock(product, promotion, Map.entry(productName, quantity));
             }
         });
     }
 
-    static boolean canApplyPromotion(Product product, Promotion promotion, Map.Entry<String, Integer> order) {
+    boolean canApplyPromotionBenefit(Product product, Promotion promotion, Map.Entry<String, Integer> order) {
         int bundle = promotion.getBuy() + promotion.getGet();
         int quantity = order.getValue();
         if (quantity < product.getQuantity()) {
@@ -68,7 +90,7 @@ public class PaymentService {
         }
     }
 
-    static String inputForOutOfStock(String productName, int shortageQuantity) {
+    String inputForOutOfStock(String productName, int shortageQuantity) {
         while (true) {
             try {
                 String answer = readForOutOfStock(productName, shortageQuantity);
@@ -80,10 +102,22 @@ public class PaymentService {
         }
     }
 
-    static String inputForAdditionalItem(String productName) {
+    String inputForAdditionalItem(String productName) {
         while (true) {
             try {
                 String answer = readForAdditionalItem(productName);
+                validateAnswer(answer);
+                return answer;
+            } catch (IllegalArgumentException e) {
+                OutputView.printError(e.getMessage());
+            }
+        }
+    }
+
+    String inputForMembershipDiscount() {
+        while (true) {
+            try {
+                String answer = readForMembershipDiscount();
                 validateAnswer(answer);
                 return answer;
             } catch (IllegalArgumentException e) {

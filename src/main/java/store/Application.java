@@ -1,6 +1,7 @@
 package store;
 
 import static store.view.Constant.WELCOME_MESSAGE;
+import static store.view.OutputView.displayReceipt;
 
 import java.io.IOException;
 import store.domain.Inventory;
@@ -19,8 +20,7 @@ public class Application {
         OutputView.printInventory(inventory);
         Order order = inputOrder(inventory);
 
-        PaymentService paymentService = new PaymentService();
-        paymentService.promotionService(inventory, promotions, order);
+        PaymentService paymentService = new PaymentService(inventory, promotions, order);
 
     }
 
