@@ -34,21 +34,46 @@ public class Receipt {
     public void applyMembershipDiscount() {
     }
 
+    public int calculateTotalPurchaseAmount() {
+        int totalPurchaseAmount = 0;
+        for (Map.Entry<Product, Integer> giveAway : purchaseHistory.entrySet()) {
+            Product product = giveAway.getKey();
+            int quantity = giveAway.getValue();
+            totalPurchaseAmount += product.getPrice() * quantity;
+        }
+        return totalPurchaseAmount;
+    }
+
+    public int calculateTotalQuantity() {
+        int totalQuantity = 0;
+        for (Integer quantity : purchaseHistory.values()) {
+            totalQuantity += quantity;
+        }
+        return totalQuantity;
+    }
+
     public int calculatePromotionDiscount() {
-        int totalPromotionDiscount = 0;
+        int promotionDiscount = 0;
         for (Map.Entry<Product, Integer> giveAway : giveAwayHistory.entrySet()) {
             Product product = giveAway.getKey();
             int quantity = giveAway.getValue();
-            totalPromotionDiscount += product.getPrice() * quantity;
+            promotionDiscount += product.getPrice() * quantity;
         }
-        return totalPromotionDiscount;
+        return promotionDiscount;
+    }
+
+    public int calculateMembershipDiscount() {
+        return 0;
+    }
+
+    public int calculatePayment() {
+        int totalPurchaseAmount = calculateTotalPurchaseAmount();
+        int promotionDiscount = calculatePromotionDiscount();
+        int membershipDiscount = calculateMembershipDiscount();
+        return totalPurchaseAmount - promotionDiscount - membershipDiscount;
     }
 
 //    public void addOrderWithoutPromotion(Product product, int quantity) {}
-//    calculateTotalAmount() {}
-//    calculateMembershipDiscount() {}
-//    calculatePayment() {}
-
 
     public Map<Product, Integer> getPurchaseHistory() {
         return Collections.unmodifiableMap(purchaseHistory);

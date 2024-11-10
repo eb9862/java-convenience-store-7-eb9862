@@ -1,13 +1,26 @@
 package store.view;
 
+import static store.view.Constant.BLANK;
 import static store.view.Constant.INTRODUCE_PRODUCT_MESSAGE;
-import static store.view.ErrorMessage.ERROR_TAG;
-import static store.view.OutputMessage.PRODUCT_INFO;
-import static store.view.OutputMessage.PRODUCT_INFO_ZERO_QUANTITY;
+import static store.util.ErrorMessage.ERROR_TAG;
+import static store.view.Constant.RECEIPT_AMOUNT_INFO_TITLE;
+import static store.view.Constant.RECEIPT_GIVEAWAY_TITLE;
+import static store.view.Constant.RECEIPT_PRODUCT_NAME_QUANTITY_AMOUNT;
+import static store.view.Constant.RECEIPT_TITLE;
+import static store.view.MessageTemplate.PRODUCT_INFO;
+import static store.view.MessageTemplate.PRODUCT_INFO_ZERO_QUANTITY;
+import static store.view.MessageTemplate.RECEIPT_GIVEAWAY_HISTORY;
+import static store.view.MessageTemplate.RECEIPT_HEADER;
+import static store.view.MessageTemplate.RECEIPT_MEMBERSHIP_DISCOUNT;
+import static store.view.MessageTemplate.RECEIPT_PAYMENT;
+import static store.view.MessageTemplate.RECEIPT_PROMOTION_DISCOUNT;
+import static store.view.MessageTemplate.RECEIPT_PURCHASE_HISTORY;
+import static store.view.MessageTemplate.RECEIPT_TOTAL_PURCHASE_AMOUNT;
 
 import java.util.List;
 import store.domain.Inventory;
 import store.domain.Product;
+import store.domain.Receipt;
 
 public class OutputView extends View {
 
@@ -26,6 +39,35 @@ public class OutputView extends View {
             return;
         }
         printMessage(PRODUCT_INFO_ZERO_QUANTITY.format(product.getName(), product.getPrice(), product.getPromotionName()));
+    }
+
+    public static void displayReceipt(Receipt receipt) {
+        printMessage(RECEIPT_TITLE);
+        printMessage(RECEIPT_HEADER.format("상품명", "수량", "금액"));
+        displayPurchaseHistory(receipt);
+        displayGiveAwayHistory(receipt);
+        displayAmountInfo(receipt);
+    }
+
+    private static void displayAmountInfo(Receipt receipt) {
+        printMessage(RECEIPT_AMOUNT_INFO_TITLE);
+        printMessage(RECEIPT_TOTAL_PURCHASE_AMOUNT.format("총구매액", receipt.calculateTotalQuantity(), receipt.calculateTotalPurchaseAmount()));
+        printMessage(RECEIPT_PROMOTION_DISCOUNT.format("행사할인", BLANK, receipt.calculatePromotionDiscount()));
+        printMessage(RECEIPT_MEMBERSHIP_DISCOUNT.format("멤버십할인", BLANK, receipt.calculateMembershipDiscount()));
+        printMessage(RECEIPT_PAYMENT.format("내실돈", receipt.calculatePayment()));
+    }
+
+    private static void displayGiveAwayHistory(Receipt receipt) {
+        printMessage(RECEIPT_GIVEAWAY_TITLE);
+        receipt.getGiveAwayHistory().forEach((product, quantity) -> {
+            printMessage(RECEIPT_GIVEAWAY_HISTORY.format(product.getName(), quantity));
+        });
+    }
+
+    private static void displayPurchaseHistory(Receipt receipt) {
+        receipt.purchaseHistory.forEach((product, quantity) -> {
+            printMessage(RECEIPT_PURCHASE_HISTORY.format(product.getName(), quantity, product.getPrice() * quantity));
+        });
     }
 
     public static void printError(String errorMessage) {
