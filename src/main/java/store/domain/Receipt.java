@@ -1,22 +1,18 @@
 package store.domain;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 public class Receipt {
 
-    public Map<Product, Integer> purchaseHistory;
-    Map<Product, Integer> giveAwayHistory;
-    List<PurchaseDetails> purchaseDetailsList;
-    int membershipApplicableAmount;
+    private final Map<Product, Integer> purchaseHistory;
+    private final Map<Product, Integer> giveAwayHistory;
+    private int membershipApplicableAmount;
 
     public Receipt() {
         purchaseHistory = new LinkedHashMap<>();
         giveAwayHistory = new LinkedHashMap<>();
-        purchaseDetailsList = new ArrayList<>();
     }
 
     public void addPurchaseHistory(Product product, int quantity) {
@@ -31,7 +27,44 @@ public class Receipt {
         }
     }
 
-    public void applyMembershipDiscount() {
+    public void applyMembershipDiscount(Promotions promotions) {
+        for (Map.Entry<Product, Integer> purchaseInfo : purchaseHistory.entrySet()) {
+            Product product = purchaseInfo.getKey();
+            int quantity = purchaseInfo.getValue();
+            if (!hasGiveAway(product.getName())) {
+                membershipApplicableAmount += product.getPrice() * quantity;
+                continue;
+            }
+            int promotionApplicableQuantity = calculatePromotionApplicableQuantity(product, promotions);
+            membershipApplicableAmount += product.getPrice() * (quantity - promotionApplicableQuantity);
+        }
+    }
+
+    private int calculatePromotionApplicableQuantity(Product product, Promotions promotions) {
+        int giveAwayQuantity = findGiveAwayQuantity(product.getName());
+        Promotion promotion = promotions.findPromotion(product.getPromotionName());
+        int bundle = promotion.calculateBundle();
+        return bundle * giveAwayQuantity;
+    }
+
+    private boolean hasGiveAway(String productName) {
+        for (Map.Entry<Product, Integer> giveAwayInfo : giveAwayHistory.entrySet()) {
+            Product product = giveAwayInfo.getKey();
+            if (productName.equals(product.getName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private int findGiveAwayQuantity(String productName) {
+        for (Map.Entry<Product, Integer> giveAwayInfo : giveAwayHistory.entrySet()) {
+            Product product = giveAwayInfo.getKey();
+            if (productName.equals(product.getName())) {
+                return giveAwayInfo.getValue();
+            }
+        }
+        return 0;
     }
 
     public int calculateTotalPurchaseAmount() {
@@ -63,7 +96,8 @@ public class Receipt {
     }
 
     public int calculateMembershipDiscount() {
-        return 0;
+        int membershipDiscount = (int) (membershipApplicableAmount * 0.3);
+        return Math.min(8000, membershipDiscount);
     }
 
     public int calculatePayment() {
@@ -72,8 +106,6 @@ public class Receipt {
         int membershipDiscount = calculateMembershipDiscount();
         return totalPurchaseAmount - promotionDiscount - membershipDiscount;
     }
-
-//    public void addOrderWithoutPromotion(Product product, int quantity) {}
 
     public Map<Product, Integer> getPurchaseHistory() {
         return Collections.unmodifiableMap(purchaseHistory);
