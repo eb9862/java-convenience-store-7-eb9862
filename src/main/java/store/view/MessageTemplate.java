@@ -11,9 +11,9 @@ public enum MessageTemplate {
     RECEIPT_PURCHASE_HISTORY("%-15s\t%-10d%,d"),
     RECEIPT_GIVEAWAY_HISTORY("%-15s\t%d"),
     RECEIPT_TOTAL_PURCHASE_AMOUNT("%-15s\t%-10d%,d"),
-    RECEIPT_PROMOTION_DISCOUNT("%-15s\t%-10s-%,d"),
-    RECEIPT_MEMBERSHIP_DISCOUNT("%-15s\t%-10s-%,d"),
-    RECEIPT_PAYMENT("%-23s%,12d");
+    RECEIPT_PROMOTION_DISCOUNT("%-15s\t%-9s-%,d"),
+    RECEIPT_MEMBERSHIP_DISCOUNT("%-15s\t%-9s-%,d"),
+    RECEIPT_PAYMENT("%-15s\t%-10s%,d");
 
     private final String messageTemplate;
 

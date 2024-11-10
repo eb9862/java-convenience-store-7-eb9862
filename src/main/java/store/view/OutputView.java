@@ -54,7 +54,7 @@ public class OutputView extends View {
         printMessage(RECEIPT_TOTAL_PURCHASE_AMOUNT.format("총구매액", receipt.calculateTotalQuantity(), receipt.calculateTotalPurchaseAmount()));
         printMessage(RECEIPT_PROMOTION_DISCOUNT.format("행사할인", BLANK, receipt.calculatePromotionDiscount()));
         printMessage(RECEIPT_MEMBERSHIP_DISCOUNT.format("멤버십할인", BLANK, receipt.calculateMembershipDiscount()));
-        printMessage(RECEIPT_PAYMENT.format("내실돈", receipt.calculatePayment()));
+        printMessage(RECEIPT_PAYMENT.format("내실돈", BLANK, receipt.calculatePayment()));
     }
 
     private static void displayGiveAwayHistory(Receipt receipt) {
