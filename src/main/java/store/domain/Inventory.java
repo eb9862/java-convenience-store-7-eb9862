@@ -2,8 +2,8 @@ package store.domain;
 
 import static store.view.Constant.BLANK;
 import static store.view.Constant.PRODUCTS_FILE_NAME;
-import static store.view.ErrorMessage.INSUFFICIENT_INVENTORY_MESSAGE;
-import static store.view.ErrorMessage.PRODUCT_NOT_FOUND_MESSAGE;
+import static store.util.ErrorMessage.INSUFFICIENT_INVENTORY_MESSAGE;
+import static store.util.ErrorMessage.PRODUCT_NOT_FOUND_MESSAGE;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -91,6 +91,15 @@ public class Inventory {
             }
         }
         return false;
+    }
+
+    public Product findProductWithPromotion(String name) {
+        for (Product product : products) {
+            if (name.equals(product.getName()) && product.hasPromotion()) {
+                return product;
+            }
+        }
+        return null;
     }
 
     private boolean isQuantityExceedingInventory(String name, int quantity) {

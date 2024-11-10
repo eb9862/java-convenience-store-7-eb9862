@@ -18,6 +18,10 @@ public class Application {
         OutputView.printMessage(WELCOME_MESSAGE);
         OutputView.printInventory(inventory);
         Order order = inputOrder(inventory);
+
+        PaymentService paymentService = new PaymentService();
+        paymentService.promotionService(inventory, promotions, order);
+
     }
 
     static Inventory prepareInventory() {

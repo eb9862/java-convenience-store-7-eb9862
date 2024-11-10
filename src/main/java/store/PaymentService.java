@@ -24,7 +24,49 @@ public class PaymentService {
         receipt = new Receipt();
     }
 
-    
+    void promotionService(Inventory inventory, Promotions promotions, Order order) {
+        Map<String, Integer> orders = order.getOrders();
+        orders.forEach((productName, quantity) -> {
+            shoppingCart.put(productName, quantity);
+            Product product = inventory.findProductWithPromotion(productName);
+            if (product != null && promotions.isPromotionApplicable(product)) {
+                Promotion promotion = promotions.findPromotion(product.getPromotionName());
+
+                boolean hasPromotionBenefit = false;
+                if (canApplyPromotion(product, promotion, Map.entry(productName, quantity))) {
+                    hasPromotionBenefit = true;
+                    if (inputForAdditionalItem(productName).equals("Y")) {
+                        shoppingCart.put(productName, quantity + 1);
+                    }
+                }
+                if (!hasPromotionBenefit) {
+                    checkOutOfStock(product, promotion, Map.entry(productName, quantity));
+                }
+            }
+        });
+    }
+
+    static boolean canApplyPromotion(Product product, Promotion promotion, Map.Entry<String, Integer> order) {
+        int bundle = promotion.getBuy() + promotion.getGet();
+        int quantity = order.getValue();
+        if (quantity < product.getQuantity()) {
+            return quantity % bundle == bundle - 1;
+        }
+        return false;
+    }
+
+    void checkOutOfStock(Product product, Promotion promotion, Map.Entry<String, Integer> order) {
+        int bundle = promotion.getBuy() + promotion.getGet();
+        int shareOfOrder = order.getValue() / bundle;
+        int shareOfProduct = product.getQuantity() / bundle;
+        int shortageQuantity = order.getValue() - (Math.min(shareOfOrder, shareOfProduct) * bundle);
+        if (shortageQuantity != 0) {
+            String answer = inputForOutOfStock(order.getKey(), shortageQuantity);
+            if (answer.equals("N")) {
+                shoppingCart.put(order.getKey(), order.getValue() - shortageQuantity);
+            }
+        }
+    }
 
     static String inputForOutOfStock(String productName, int shortageQuantity) {
         while (true) {

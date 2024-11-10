@@ -2,6 +2,7 @@ package store.domain;
 
 import static store.view.Constant.PROMOTIONS_FILE_NAME;
 
+import camp.nextstep.edu.missionutils.DateTimes;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -55,6 +56,24 @@ public class Promotions {
         LocalDateTime startDate = (LocalDateTime) promotionInfo.get(3);
         LocalDateTime endDate = (LocalDateTime) promotionInfo.getLast();
         return new Promotion(name, buy, get, startDate, endDate);
+    }
+
+    public boolean isPromotionApplicable(Product product) {
+        for (Promotion promotion : promotions) {
+            if (product.getPromotionName().equals(promotion.getName())) {
+                return promotion.canApply(DateTimes.now());
+            }
+        }
+        return false;
+    }
+
+    public Promotion findPromotion(String promotionName) {
+        for (Promotion promotion : promotions) {
+            if (promotionName.equals(promotion.getName())) {
+                return promotion;
+            }
+        }
+        return null;
     }
 
     public List<Promotion> getPromotions() {
