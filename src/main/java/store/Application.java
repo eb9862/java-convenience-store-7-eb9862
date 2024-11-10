@@ -1,6 +1,9 @@
 package store;
 
+import static store.util.Validator.validateAnswer;
 import static store.view.Constant.WELCOME_MESSAGE;
+import static store.view.InputView.readForAdditionalPurchase;
+import static store.view.InputView.readForOutOfStock;
 import static store.view.OutputView.displayReceipt;
 
 import java.io.IOException;
@@ -16,11 +19,19 @@ public class Application {
         Inventory inventory = prepareInventory();
         Promotions promotions = preparePromotions();
 
-        OutputView.printMessage(WELCOME_MESSAGE);
-        OutputView.printInventory(inventory);
-        Order order = inputOrder(inventory);
+        while (true) {
+            OutputView.printMessage(WELCOME_MESSAGE);
+            OutputView.printInventory(inventory);
+            Order order = inputOrder(inventory);
 
-        PaymentService paymentService = new PaymentService(inventory, promotions, order);
+            PaymentService paymentService = new PaymentService(inventory, promotions, order);
+
+            displayReceipt(paymentService.receipt);
+            String answer = inputAdditionalPurchase();
+            if (answer.equals("N")) {
+                break;
+            }
+        }
 
     }
 
@@ -50,6 +61,18 @@ public class Application {
                 Order order = new Order(InputView.readOrder());
                 inventory.checkOrder(order);
                 return order;
+            } catch (IllegalArgumentException e) {
+                OutputView.printError(e.getMessage());
+            }
+        }
+    }
+
+    static String inputAdditionalPurchase() {
+        while (true) {
+            try {
+                String answer = readForAdditionalPurchase();
+                validateAnswer(answer);
+                return answer;
             } catch (IllegalArgumentException e) {
                 OutputView.printError(e.getMessage());
             }
