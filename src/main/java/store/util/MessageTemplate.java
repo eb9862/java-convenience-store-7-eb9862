@@ -1,4 +1,4 @@
-package store.view;
+package store.util;
 
 public enum MessageTemplate {
 
@@ -20,7 +20,7 @@ public enum MessageTemplate {
         this.messageTemplate = messageTemplate;
     }
 
-    String format(Object... args) {
+    public String format(Object... args) {
         return String.format(messageTemplate, args);
     }
 }
