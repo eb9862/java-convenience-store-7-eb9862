@@ -34,48 +34,6 @@ public class Inventory {
         br.close();
     }
 
-    public void reducePromotionStock(String productName, int quantity) {
-        Product product = findProductWithPromotion(productName);
-        int subtractValue = product.getQuantity() - quantity;
-        if (subtractValue < 0) {
-            product.reduceQuantityToZero();
-            Product productWithoutPromotion = findProductWithoutPromotion(productName);
-            reduceProduct(productWithoutPromotion, Math.abs(subtractValue));
-            return;
-        }
-        reduceProduct(product, quantity);
-    }
-
-    public void reduceNotPromotionStock(String productName, int quantity) {
-        Product product = findProductWithoutPromotion(productName);
-        int subtractValue = product.getQuantity() - quantity;
-        if (subtractValue < 0) {
-            product.reduceQuantityToZero();
-            Product productWithPromotion = findProductWithPromotion(productName);
-            reduceProduct(productWithPromotion, Math.abs(subtractValue));
-            return;
-        }
-        reduceProduct(product, quantity);
-    }
-
-    private void reduceProduct(Product product, int quantity) {
-        for (int i = 0; i < quantity; i++) {
-            product.reduceQuantity();
-        }
-    }
-
-    public void checkOrder(Order order) {
-        Map<String, Integer> orderInfo = order.getOrders();
-        orderInfo.forEach((name, quantity) -> {
-            if (!hasProduct(name)) {
-                throw new IllegalArgumentException(PRODUCT_NOT_FOUND_MESSAGE);
-            }
-            if (isQuantityExceedingInventory(name, quantity)) {
-                throw new IllegalArgumentException(INSUFFICIENT_INVENTORY_MESSAGE);
-            }
-        });
-    }
-
     private List<Object> parseProductInfo(String line) {
         List<Object> productInfo = new ArrayList<>(List.of(line.split(",")));
         String productPrice = (String) productInfo.get(1);
@@ -114,13 +72,78 @@ public class Inventory {
         return new Product(name, price, quantity, promotion);
     }
 
-    private boolean hasProduct(String name) {
+    public void reducePromotionStock(String productName, int quantity) {
+        Product product = findProductWithPromotion(productName);
+        int subtractValue = product.getQuantity() - quantity;
+        if (subtractValue < 0) {
+            product.reduceQuantityToZero();
+            Product productWithoutPromotion = findProductWithoutPromotion(productName);
+            reduceProduct(productWithoutPromotion, Math.abs(subtractValue));
+            return;
+        }
+        reduceProduct(product, quantity);
+    }
+
+    public void reduceNotPromotionStock(String productName, int quantity) {
+        Product product = findProductWithoutPromotion(productName);
+        int subtractValue = product.getQuantity() - quantity;
+        if (subtractValue < 0) {
+            product.reduceQuantityToZero();
+            Product productWithPromotion = findProductWithPromotion(productName);
+            reduceProduct(productWithPromotion, Math.abs(subtractValue));
+            return;
+        }
+        reduceProduct(product, quantity);
+    }
+
+    private void reduceProduct(Product product, int quantity) {
+        for (int i = 0; i < quantity; i++) {
+            product.reduceQuantity();
+        }
+    }
+
+    public void checkOrder(Order order) {
+        Map<String, Integer> orderInfo = order.getOrders();
+        orderInfo.forEach((name, quantity) -> {
+            checkProductInInventory(name);
+            checkPurchaseQuantity(name, quantity);
+        });
+    }
+
+    private void checkProductInInventory(String name) {
+        if (!hasProduct(name)) {
+            throw new IllegalArgumentException(PRODUCT_NOT_FOUND_MESSAGE);
+        }
+    }
+
+    public boolean hasProduct(String name) {
         for (Product product : products) {
             if (name.equals(product.getName())) {
                 return true;
             }
         }
         return false;
+    }
+
+    private void checkPurchaseQuantity(String name, int quantity) {
+        if (isQuantityExceedingInventory(name, quantity)) {
+            throw new IllegalArgumentException(INSUFFICIENT_INVENTORY_MESSAGE);
+        }
+    }
+
+    private boolean isQuantityExceedingInventory(String name, int quantity) {
+        int totalQuantity = findTotalQuantity(name);
+        return totalQuantity < quantity;
+    }
+
+    private int findTotalQuantity(String name) {
+        int totalQuantity = 0;
+        for (Product product : products) {
+            if (name.equals(product.getName())) {
+                totalQuantity += product.getQuantity();
+            }
+        }
+        return totalQuantity;
     }
 
     public Product findProductWithPromotion(String name) {
@@ -139,21 +162,6 @@ public class Inventory {
             }
         }
         return null;
-    }
-
-    private boolean isQuantityExceedingInventory(String name, int quantity) {
-        int totalQuantity = findTotalQuantity(name);
-        return totalQuantity < quantity;
-    }
-
-    private int findTotalQuantity(String name) {
-        int totalQuantity = 0;
-        for (Product product : products) {
-            if (name.equals(product.getName())) {
-                totalQuantity += product.getQuantity();
-            }
-        }
-        return totalQuantity;
     }
 
     public List<Product> getProducts() {
