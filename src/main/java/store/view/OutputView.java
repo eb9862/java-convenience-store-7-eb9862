@@ -8,11 +8,10 @@ import static store.util.Constant.RECEIPT_GIVEAWAY_TITLE;
 import static store.util.Constant.RECEIPT_TITLE;
 import static store.view.MessageTemplate.PRODUCT_INFO;
 import static store.view.MessageTemplate.PRODUCT_INFO_ZERO_QUANTITY;
+import static store.view.MessageTemplate.RECEIPT_DISCOUNT;
 import static store.view.MessageTemplate.RECEIPT_GIVEAWAY_HISTORY;
 import static store.view.MessageTemplate.RECEIPT_HEADER;
-import static store.view.MessageTemplate.RECEIPT_MEMBERSHIP_DISCOUNT;
 import static store.view.MessageTemplate.RECEIPT_PAYMENT;
-import static store.view.MessageTemplate.RECEIPT_PROMOTION_DISCOUNT;
 import static store.view.MessageTemplate.RECEIPT_PURCHASE_HISTORY;
 import static store.view.MessageTemplate.RECEIPT_TOTAL_PURCHASE_AMOUNT;
 
@@ -55,8 +54,8 @@ public class OutputView extends View {
         printMessage(RECEIPT_AMOUNT_INFO_TITLE);
         printMessage(RECEIPT_TOTAL_PURCHASE_AMOUNT.format("총구매액", receipt.calculateTotalQuantity(),
                 receipt.calculateTotalPurchaseAmount()));
-        printMessage(RECEIPT_PROMOTION_DISCOUNT.format("행사할인", BLANK, receipt.calculatePromotionDiscount()));
-        printMessage(RECEIPT_MEMBERSHIP_DISCOUNT.format("멤버십할인", BLANK, receipt.calculateMembershipDiscount()));
+        printMessage(RECEIPT_DISCOUNT.format("행사할인", BLANK, receipt.calculatePromotionDiscount()));
+        printMessage(RECEIPT_DISCOUNT.format("멤버십할인", BLANK, receipt.calculateMembershipDiscount()));
         printMessage(RECEIPT_PAYMENT.format("내실돈", BLANK, receipt.calculatePayment()));
     }
 
