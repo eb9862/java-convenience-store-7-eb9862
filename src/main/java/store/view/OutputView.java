@@ -1,11 +1,11 @@
 package store.view;
 
 import static store.util.Constant.BLANK;
-import static store.util.Constant.INTRODUCE_PRODUCT_MESSAGE;
 import static store.util.ErrorMessage.ERROR_TAG;
 import static store.util.Constant.RECEIPT_AMOUNT_INFO_TITLE;
 import static store.util.Constant.RECEIPT_GIVEAWAY_TITLE;
 import static store.util.Constant.RECEIPT_TITLE;
+import static store.util.InformationMessage.INTRODUCE_PRODUCT_MESSAGE;
 import static store.util.MessageTemplate.PRODUCT_INFO;
 import static store.util.MessageTemplate.PRODUCT_INFO_ZERO_QUANTITY;
 import static store.util.MessageTemplate.RECEIPT_DISCOUNT;

@@ -1,8 +1,8 @@
 package store.view;
 
-import static store.util.Constant.ADDITIONAL_PURCHASE_MESSAGE;
-import static store.util.Constant.MEMBERSHIP_DISCOUNT_MESSAGE;
-import static store.util.Constant.ORDER_MESSAGE;
+import static store.util.InformationMessage.ADDITIONAL_PURCHASE_MESSAGE;
+import static store.util.InformationMessage.MEMBERSHIP_DISCOUNT_MESSAGE;
+import static store.util.InformationMessage.ORDER_MESSAGE;
 import static store.util.MessageTemplate.PROMOTION_BENEFIT;
 import static store.util.MessageTemplate.PROMOTION_QUANTITY_SHORTAGE;
 

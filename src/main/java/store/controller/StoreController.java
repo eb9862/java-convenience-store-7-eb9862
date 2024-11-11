@@ -1,8 +1,7 @@
 package store.controller;
 
 import static store.util.Constant.ANSWER_NO;
-import static store.util.Constant.ANSWER_YES;
-import static store.util.Constant.WELCOME_MESSAGE;
+import static store.util.InformationMessage.WELCOME_MESSAGE;
 import static store.util.Validator.validateAnswer;
 import static store.view.InputView.readForAdditionalPurchase;
 import static store.view.OutputView.displayReceipt;
