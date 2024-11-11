@@ -1,5 +1,7 @@
 package store.service;
 
+import static store.util.Constant.ANSWER_NO;
+import static store.util.Constant.ANSWER_YES;
 import static store.util.Validator.validateAnswer;
 import static store.view.InputView.readForAdditionalItem;
 import static store.view.InputView.readForMembershipDiscount;
@@ -32,7 +34,7 @@ public class PaymentService {
 
     private void checkMembershipDiscount(Promotions promotions) {
         String answer = inputForMembershipDiscount();
-        if (answer.equals("Y")) {
+        if (answer.equals(ANSWER_YES)) {
             receipt.applyMembershipDiscount(promotions);
         }
     }
@@ -84,7 +86,7 @@ public class PaymentService {
         String productName = order.getKey();
         int quantity = order.getValue();
         if (canApplyPromotionBenefit(product, promotion, Map.entry(productName, quantity))) {
-            if (inputForAdditionalItem(productName).equals("Y")) {
+            if (inputForAdditionalItem(productName).equals(ANSWER_YES)) {
                 shoppingCart.put(productName, quantity + 1);
             }
             return;
@@ -108,7 +110,7 @@ public class PaymentService {
         int shortageQuantity = order.getValue() - (Math.min(shareOfOrder, shareOfProduct) * bundle);
         if (shortageQuantity != 0) {
             String answer = inputForOutOfStock(order.getKey(), shortageQuantity);
-            if (answer.equals("N")) {
+            if (answer.equals(ANSWER_NO)) {
                 shoppingCart.put(order.getKey(), order.getValue() - shortageQuantity);
             }
         }

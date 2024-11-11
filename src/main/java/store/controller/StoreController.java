@@ -1,5 +1,7 @@
 package store.controller;
 
+import static store.util.Constant.ANSWER_NO;
+import static store.util.Constant.ANSWER_YES;
 import static store.util.Constant.WELCOME_MESSAGE;
 import static store.util.Validator.validateAnswer;
 import static store.view.InputView.readForAdditionalPurchase;
@@ -31,7 +33,7 @@ public class StoreController {
             Order order = inputOrder(inventory);
             PaymentService paymentService = new PaymentService(inventory, promotions, order);
             displayReceipt(paymentService.getReceipt());
-        } while (!inputAdditionalPurchase().equals("N"));
+        } while (!inputAdditionalPurchase().equals(ANSWER_NO));
         closeConsole();
     }
 
