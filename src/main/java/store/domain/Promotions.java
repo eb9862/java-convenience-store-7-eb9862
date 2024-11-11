@@ -75,8 +75,4 @@ public class Promotions {
         }
         return null;
     }
-
-    public List<Promotion> getPromotions() {
-        return promotions;
-    }
 }
