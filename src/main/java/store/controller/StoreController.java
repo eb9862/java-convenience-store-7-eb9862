@@ -35,7 +35,7 @@ public class StoreController {
         closeConsole();
     }
 
-    static Inventory prepareInventory() {
+    Inventory prepareInventory() {
         Inventory inventory;
         try {
             inventory = new Inventory();
@@ -45,7 +45,7 @@ public class StoreController {
         }
     }
 
-    static Promotions preparePromotions() {
+    Promotions preparePromotions() {
         Promotions promotions;
         try {
             promotions = new Promotions();
@@ -55,7 +55,7 @@ public class StoreController {
         }
     }
 
-    static Order inputOrder(Inventory inventory) {
+    Order inputOrder(Inventory inventory) {
         while (true) {
             try {
                 Order order = new Order(InputView.readOrder());
@@ -67,7 +67,7 @@ public class StoreController {
         }
     }
 
-    static String inputAdditionalPurchase() {
+    String inputAdditionalPurchase() {
         while (true) {
             try {
                 String answer = readForAdditionalPurchase();
