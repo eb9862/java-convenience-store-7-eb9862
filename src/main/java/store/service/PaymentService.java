@@ -23,7 +23,7 @@ public class PaymentService {
     public PaymentService(Inventory inventory, Promotions promotions, Order order) {
         shoppingCart = new LinkedHashMap<>();
         receipt = new Receipt();
-        checkBenefitOrOutOfStock(inventory, promotions, order);
+        checkPromotionProduct(inventory, promotions, order);
         updatePurchaseHistory(inventory);
         updateGiveAwayHistory(inventory, promotions, order);
         updateInventory(inventory, promotions);
@@ -68,22 +68,28 @@ public class PaymentService {
         });
     }
 
-    private void checkBenefitOrOutOfStock(Inventory inventory, Promotions promotions, Order order) {
+    private void checkPromotionProduct(Inventory inventory, Promotions promotions, Order order) {
         Map<String, Integer> orders = order.getOrders();
         orders.forEach((productName, quantity) -> {
             shoppingCart.put(productName, quantity);
             Product product = inventory.findProductWithPromotion(productName);
             if (product != null && promotions.isPromotionApplicable(product)) {
                 Promotion promotion = promotions.findPromotion(product.getPromotionName());
-                if (canApplyPromotionBenefit(product, promotion, Map.entry(productName, quantity))) {
-                    if (inputForAdditionalItem(productName).equals("Y")) {
-                        shoppingCart.put(productName, quantity + 1);
-                    }
-                    return;
-                }
-                checkOutOfStock(product, promotion, Map.entry(productName, quantity));
+                checkBenefitOrOutOfStock(product, promotion, Map.entry(productName, quantity));
             }
         });
+    }
+
+    private void checkBenefitOrOutOfStock(Product product, Promotion promotion, Map.Entry<String, Integer> order) {
+        String productName = order.getKey();
+        int quantity = order.getValue();
+        if (canApplyPromotionBenefit(product, promotion, Map.entry(productName, quantity))) {
+            if (inputForAdditionalItem(productName).equals("Y")) {
+                shoppingCart.put(productName, quantity + 1);
+            }
+            return;
+        }
+        checkOutOfStock(product, promotion, Map.entry(productName, quantity));
     }
 
     private boolean canApplyPromotionBenefit(Product product, Promotion promotion, Map.Entry<String, Integer> order) {
