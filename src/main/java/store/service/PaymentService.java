@@ -37,7 +37,7 @@ public class PaymentService {
         }
     }
 
-    void updateInventory(Inventory inventory, Promotions promotions) {
+    private void updateInventory(Inventory inventory, Promotions promotions) {
         shoppingCart.forEach((productName, quantity) -> {
             Product product = inventory.findProductWithPromotion(productName);
             if (product != null && promotions.isPromotionApplicable(product)) {
