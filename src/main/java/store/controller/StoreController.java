@@ -6,7 +6,7 @@ import static store.view.InputView.readForAdditionalPurchase;
 import static store.view.OutputView.displayReceipt;
 
 import java.io.IOException;
-import store.PaymentService;
+import store.service.PaymentService;
 import store.domain.Inventory;
 import store.domain.Order;
 import store.domain.Promotions;

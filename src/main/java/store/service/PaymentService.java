@@ -1,4 +1,4 @@
-package store;
+package store.service;
 
 import static store.util.Validator.validateAnswer;
 import static store.view.InputView.readForAdditionalItem;
