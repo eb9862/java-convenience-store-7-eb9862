@@ -1,5 +1,8 @@
 package store.domain;
 
+import static store.util.Constant.MEMBERSHIP_DISCOUNT_LIMIT;
+import static store.util.Constant.MEMBERSHIP_DISCOUNT_RATE;
+
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -96,8 +99,8 @@ public class Receipt {
     }
 
     public int calculateMembershipDiscount() {
-        int membershipDiscount = (int) (membershipApplicableAmount * 0.3);
-        return Math.min(8000, membershipDiscount);
+        int membershipDiscount = (int) (membershipApplicableAmount * MEMBERSHIP_DISCOUNT_RATE);
+        return Math.min(MEMBERSHIP_DISCOUNT_LIMIT, membershipDiscount);
     }
 
     public int calculatePayment() {
