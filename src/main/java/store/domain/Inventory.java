@@ -40,7 +40,7 @@ public class Inventory {
         if (subtractValue < 0) {
             product.reduceQuantityToZero();
             Product productWithoutPromotion = findProductWithoutPromotion(productName);
-            reduceProduct(productWithoutPromotion, -1 * subtractValue);
+            reduceProduct(productWithoutPromotion, Math.abs(subtractValue));
             return;
         }
         reduceProduct(product, quantity);
@@ -52,7 +52,7 @@ public class Inventory {
         if (subtractValue < 0) {
             product.reduceQuantityToZero();
             Product productWithPromotion = findProductWithPromotion(productName);
-            reduceProduct(productWithPromotion, -1 * subtractValue);
+            reduceProduct(productWithPromotion, Math.abs(subtractValue));
             return;
         }
         reduceProduct(product, quantity);
