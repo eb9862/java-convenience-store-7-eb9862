@@ -26,7 +26,7 @@ public class PaymentService {
         checkBenefitOrOutOfStock(inventory, promotions, order);
         updatePurchaseHistory(inventory);
         updateGiveAwayHistory(inventory, promotions, order);
-        //updateInventory(inventory, promotions, order);
+        updateInventory(inventory, promotions);
         checkMembershipDiscount(promotions);
     }
 
@@ -37,7 +37,16 @@ public class PaymentService {
         }
     }
 
-    //void updateInventory(Inventory inventory, Promotions promotions, Order order) {}
+    void updateInventory(Inventory inventory, Promotions promotions) {
+        shoppingCart.forEach((productName, quantity) -> {
+            Product product = inventory.findProductWithPromotion(productName);
+            if (product != null && promotions.isPromotionApplicable(product)) {
+                inventory.reducePromotionStock(productName, quantity);
+                return;
+            }
+            inventory.reduceNotPromotionStock(productName, quantity);
+        });
+    }
 
     private void updatePurchaseHistory(Inventory inventory) {
         shoppingCart.forEach((productName, quantity) -> {

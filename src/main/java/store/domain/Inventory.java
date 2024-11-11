@@ -34,6 +34,36 @@ public class Inventory {
         br.close();
     }
 
+    public void reducePromotionStock(String productName, int quantity) {
+        Product product = findProductWithPromotion(productName);
+        int subtractValue = product.getQuantity() - quantity;
+        if (subtractValue < 0) {
+            product.reduceQuantityToZero();
+            Product productWithoutPromotion = findProductWithoutPromotion(productName);
+            reduceProduct(productWithoutPromotion, -1 * subtractValue);
+            return;
+        }
+        reduceProduct(product, quantity);
+    }
+
+    public void reduceNotPromotionStock(String productName, int quantity) {
+        Product product = findProductWithoutPromotion(productName);
+        int subtractValue = product.getQuantity() - quantity;
+        if (subtractValue < 0) {
+            product.reduceQuantityToZero();
+            Product productWithPromotion = findProductWithPromotion(productName);
+            reduceProduct(productWithPromotion, -1 * subtractValue);
+            return;
+        }
+        reduceProduct(product, quantity);
+    }
+
+    private void reduceProduct(Product product, int quantity) {
+        for (int i = 0; i < quantity; i++) {
+            product.reduceQuantity();
+        }
+    }
+
     public void checkOrder(Order order) {
         Map<String, Integer> orderInfo = order.getOrders();
         orderInfo.forEach((name, quantity) -> {

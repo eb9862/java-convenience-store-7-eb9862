@@ -23,6 +23,14 @@ public class Product {
         return promotionName;
     }
 
+    public void reduceQuantity() {
+        this.quantity--;
+    }
+
+    public void reduceQuantityToZero() {
+        this.quantity = 0;
+    }
+
     public boolean isZeroQuantity() {
         return quantity == 0;
     }
