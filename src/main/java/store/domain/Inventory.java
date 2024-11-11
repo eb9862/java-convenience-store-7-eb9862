@@ -132,7 +132,7 @@ public class Inventory {
         return null;
     }
 
-    public static Product findProductWithoutPromotion(String name) {
+    public Product findProductWithoutPromotion(String name) {
         for (Product product : products) {
             if (name.equals(product.getName()) && !product.hasPromotion()) {
                 return product;

@@ -52,7 +52,7 @@ public class PaymentService {
         shoppingCart.forEach((productName, quantity) -> {
             Product product = inventory.findProductWithPromotion(productName);
             if (product == null) {
-                product = Inventory.findProductWithoutPromotion(productName);
+                product = inventory.findProductWithoutPromotion(productName);
             }
             receipt.addPurchaseHistory(product, quantity);
         });
