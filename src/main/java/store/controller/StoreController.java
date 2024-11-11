@@ -5,6 +5,7 @@ import static store.util.Validator.validateAnswer;
 import static store.view.InputView.readForAdditionalPurchase;
 import static store.view.OutputView.displayReceipt;
 
+import camp.nextstep.edu.missionutils.Console;
 import java.io.IOException;
 import store.service.PaymentService;
 import store.domain.Inventory;
@@ -31,6 +32,7 @@ public class StoreController {
             PaymentService paymentService = new PaymentService(inventory, promotions, order);
             displayReceipt(paymentService.getReceipt());
         } while (!inputAdditionalPurchase().equals("N"));
+        closeConsole();
     }
 
     static Inventory prepareInventory() {
@@ -75,5 +77,9 @@ public class StoreController {
                 OutputView.printError(e.getMessage());
             }
         }
+    }
+
+    void closeConsole() {
+        Console.close();
     }
 }
