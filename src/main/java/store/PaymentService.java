@@ -30,7 +30,7 @@ public class PaymentService {
         checkMembershipDiscount(promotions);
     }
 
-    void checkMembershipDiscount(Promotions promotions) {
+    private void checkMembershipDiscount(Promotions promotions) {
         String answer = inputForMembershipDiscount();
         if (answer.equals("Y")) {
             receipt.applyMembershipDiscount(promotions);
@@ -39,7 +39,7 @@ public class PaymentService {
 
     //void updateInventory(Inventory inventory, Promotions promotions, Order order) {}
 
-    void updatePurchaseHistory(Inventory inventory) {
+    private void updatePurchaseHistory(Inventory inventory) {
         shoppingCart.forEach((productName, quantity) -> {
             Product product = inventory.findProductWithPromotion(productName);
             if (product == null) {
@@ -49,7 +49,7 @@ public class PaymentService {
         });
     }
 
-    void updateGiveAwayHistory(Inventory inventory, Promotions promotions, Order order) {
+    private void updateGiveAwayHistory(Inventory inventory, Promotions promotions, Order order) {
         shoppingCart.forEach((productName, quantity) -> {
             Product product = inventory.findProductWithPromotion(productName);
             if (product != null && promotions.isPromotionApplicable(product)) {
@@ -59,7 +59,7 @@ public class PaymentService {
         });
     }
 
-    void checkBenefitOrOutOfStock(Inventory inventory, Promotions promotions, Order order) {
+    private void checkBenefitOrOutOfStock(Inventory inventory, Promotions promotions, Order order) {
         Map<String, Integer> orders = order.getOrders();
         orders.forEach((productName, quantity) -> {
             shoppingCart.put(productName, quantity);
@@ -77,7 +77,7 @@ public class PaymentService {
         });
     }
 
-    boolean canApplyPromotionBenefit(Product product, Promotion promotion, Map.Entry<String, Integer> order) {
+    private boolean canApplyPromotionBenefit(Product product, Promotion promotion, Map.Entry<String, Integer> order) {
         int bundle = promotion.calculateBundle();
         int quantity = order.getValue();
         if (quantity < product.getQuantity()) {
@@ -86,7 +86,7 @@ public class PaymentService {
         return false;
     }
 
-    void checkOutOfStock(Product product, Promotion promotion, Map.Entry<String, Integer> order) {
+    private void checkOutOfStock(Product product, Promotion promotion, Map.Entry<String, Integer> order) {
         int bundle = promotion.calculateBundle();
         int shareOfOrder = order.getValue() / bundle;
         int shareOfProduct = product.getQuantity() / bundle;
@@ -99,7 +99,7 @@ public class PaymentService {
         }
     }
 
-    String inputForOutOfStock(String productName, int shortageQuantity) {
+    private String inputForOutOfStock(String productName, int shortageQuantity) {
         while (true) {
             try {
                 String answer = readForOutOfStock(productName, shortageQuantity);
@@ -111,7 +111,7 @@ public class PaymentService {
         }
     }
 
-    String inputForAdditionalItem(String productName) {
+    private String inputForAdditionalItem(String productName) {
         while (true) {
             try {
                 String answer = readForAdditionalItem(productName);
@@ -123,7 +123,7 @@ public class PaymentService {
         }
     }
 
-    String inputForMembershipDiscount() {
+    private String inputForMembershipDiscount() {
         while (true) {
             try {
                 String answer = readForMembershipDiscount();
