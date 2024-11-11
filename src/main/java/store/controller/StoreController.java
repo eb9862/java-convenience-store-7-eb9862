@@ -16,8 +16,8 @@ import store.view.OutputView;
 
 public class StoreController {
 
-    Inventory inventory;
-    Promotions promotions;
+    private final Inventory inventory;
+    private final Promotions promotions;
 
     public StoreController() {
         inventory = prepareInventory();

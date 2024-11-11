@@ -15,7 +15,7 @@ import java.util.Map;
 
 public class Inventory {
 
-    static List<Product> products;
+    private static List<Product> products;
 
     public Inventory() throws IOException {
         products = new ArrayList<>();

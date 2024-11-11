@@ -17,8 +17,8 @@ import store.view.OutputView;
 
 public class PaymentService {
 
-    Map<String, Integer> shoppingCart;
-    Receipt receipt;
+    private final Map<String, Integer> shoppingCart;
+    private final Receipt receipt;
 
     public PaymentService(Inventory inventory, Promotions promotions, Order order) {
         shoppingCart = new LinkedHashMap<>();

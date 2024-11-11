@@ -13,7 +13,7 @@ import java.util.List;
 
 public class Promotions {
 
-    List<Promotion> promotions;
+    private final List<Promotion> promotions;
 
     public Promotions() throws IOException {
         this.promotions = new ArrayList<>();

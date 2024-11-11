@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class Order {
 
-    Map<String, Integer> orders;
+    private final Map<String, Integer> orders;
 
     public Order(String orderInput) {
         this.orders = new LinkedHashMap<>();
