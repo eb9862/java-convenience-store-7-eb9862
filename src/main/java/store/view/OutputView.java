@@ -23,6 +23,8 @@ import store.domain.Receipt;
 
 public class OutputView extends View {
 
+    private OutputView() {}
+
     public static void printInventory(Inventory inventory) {
         printMessage(INTRODUCE_PRODUCT_MESSAGE);
         printNewLine();

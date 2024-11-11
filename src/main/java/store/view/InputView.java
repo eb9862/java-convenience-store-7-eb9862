@@ -10,6 +10,8 @@ import camp.nextstep.edu.missionutils.Console;
 
 public class InputView extends View {
 
+    private InputView() {}
+
     public static String readOrder() {
         printNewLine();
         printMessage(ORDER_MESSAGE);

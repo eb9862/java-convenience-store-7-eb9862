@@ -2,6 +2,8 @@ package store.util;
 
 public class Constant {
 
+    private Constant() {}
+
     public static final String PRODUCTS_FILE_NAME = "src/main/resources/products.md";
     public static final String PROMOTIONS_FILE_NAME = "src/main/resources/promotions.md";
     public static final String BLANK = "";
