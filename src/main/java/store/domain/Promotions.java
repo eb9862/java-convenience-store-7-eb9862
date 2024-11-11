@@ -1,12 +1,12 @@
 package store.domain;
 
 import static store.util.Constant.PROMOTIONS_FILE_NAME;
+import static store.util.Parser.parsePromotionInfo;
 
 import camp.nextstep.edu.missionutils.DateTimes;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,24 +29,6 @@ public class Promotions {
             promotions.add(createPromotion(promotionInfo));
         }
         br.close();
-    }
-
-    private static List<Object> parsePromotionInfo(String line) {
-        List<Object> promotionInfo = new ArrayList<>(List.of(line.split(",")));
-        String buy = (String) promotionInfo.get(1);
-        promotionInfo.set(1, Integer.parseInt(buy));
-        String get = (String) promotionInfo.get(2);
-        promotionInfo.set(2, Integer.parseInt(get));
-        String startDate = (String) promotionInfo.get(3);
-        promotionInfo.set(3, toLocalDateTime(startDate));
-        String endDate = (String) promotionInfo.get(4);
-        promotionInfo.set(4, toLocalDateTime(endDate));
-        return promotionInfo;
-    }
-
-    private static LocalDateTime toLocalDateTime(String date) {
-        LocalDate localdate = LocalDate.parse(date);
-        return localdate.atStartOfDay();
     }
 
     private static Promotion createPromotion(List<Object> promotionInfo) {

@@ -4,6 +4,7 @@ import static store.util.Constant.BLANK;
 import static store.util.Constant.PRODUCTS_FILE_NAME;
 import static store.util.ErrorMessage.INSUFFICIENT_INVENTORY_MESSAGE;
 import static store.util.ErrorMessage.PRODUCT_NOT_FOUND_MESSAGE;
+import static store.util.Parser.parseProductInfo;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -32,15 +33,6 @@ public class Inventory {
             products.add(createProduct(productInfo));
         }
         br.close();
-    }
-
-    private List<Object> parseProductInfo(String line) {
-        List<Object> productInfo = new ArrayList<>(List.of(line.split(",")));
-        String productPrice = (String) productInfo.get(1);
-        productInfo.set(1, Integer.parseInt(productPrice));
-        String productQuantity = (String) productInfo.get(2);
-        productInfo.set(2, Integer.parseInt(productQuantity));
-        return productInfo;
     }
 
     private void addIfNoProductWithoutPromotion(List<Object> productInfo) {
