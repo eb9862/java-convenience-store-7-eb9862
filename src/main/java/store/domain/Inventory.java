@@ -18,7 +18,7 @@ public class Inventory {
     static List<Product> products;
 
     public Inventory() throws IOException {
-        this.products = new ArrayList<>();
+        products = new ArrayList<>();
         loadFromFile();
     }
 
